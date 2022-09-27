@@ -11,11 +11,11 @@ double fx2b = f2(1.9);
     //Console.WriteLine(fxa + " " + fx2a + " " + fxb + " " + fx2b);
 if ((fxa>0 & fx2a>0)| (fxa < 0 & fx2a < 0))
 {
-        iteration(1.9, 1.0);
+        iteration(1.9, 1.0,0.0001);
 }
 else if ((fxb > 0 & fx2b > 0) | (fxb < 0 & fx2b < 0))
     {
-        iteration(1.0, 1.9);
+        iteration(1.0, 1.9, 0.0001);
     }
     else
         {
@@ -24,11 +24,11 @@ else if ((fxb > 0 & fx2b > 0) | (fxb < 0 & fx2b < 0))
 
     
 }
-double[][] iteration(double x1, double x2)
+double[][] iteration(double x1, double x2,double stop)
 {
     List<double[]> kombo = new List<double[]>();
     double la = Math.Abs(1 / Math.Max(f1(x1), f1(x2)));
-    for (int i = 0; i < 4; i++)
+    while (true)
     {
 
         double[] line = new double[2];
@@ -36,9 +36,13 @@ double[][] iteration(double x1, double x2)
         line[1] = Math.Max(f(x1), f(x2));
         kombo.Add(line);
         x1 = x1 + la * line[1];
-
+        if (Math.Abs(line[1]) < stop)
+        {
+            break;
+        }
 
     }
+    
     double[][] db = kombo.ToArray();
     for (int i = 0; i < db.Length; i++)
     {
@@ -47,10 +51,10 @@ double[][] iteration(double x1, double x2)
     }
     return kombo.ToArray();
 }
-double[][] kombo(double x1,double x2)
+double[][] kombo(double x1,double x2,double stop)
 {
     List<double[]> kombo = new List<double[]>();
-    for (int i = 0; i < 4; i++)
+    while (true)
     {
         
         double[] line = new double[6];
@@ -63,7 +67,12 @@ double[][] kombo(double x1,double x2)
         kombo.Add(line);
         x1 = x1 - line[4];
         x2 = x2 - line[5];
+        if (line[1] < stop | line[3]<stop)
+        {
+            break;
+        }
     }
+    
     double[][] db = kombo.ToArray();
     for (int i = 0; i < db.Length; i++)
     {
