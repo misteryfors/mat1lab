@@ -1,0 +1,131 @@
+using System;
+using System.Collections.Generic;
+
+namespace ConsoleApp7
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            double x1 = 1.0;
+            double x2 = 1.9;
+            double e= 0.0001;
+                Console.WriteLine("Hello, World!");
+                double fxa = f(x1);
+                double fx1a = f1(x1);
+                double fx2a = f2(x1);
+                double fxb = f(x2);
+                double fx1b = f1(x2);
+                double fx2b = f2(x2);
+                string func = Console.ReadLine();
+            switch(func)
+            {
+                case "1":
+                    {
+                        if ((fxa > 0 & fx2a > 0) | (fxa < 0 & fx2a < 0))
+                        {
+                            iteration(x2, x1, e);
+                        }
+                        else if ((fxb > 0 & fx2b > 0) | (fxb < 0 & fx2b < 0))
+                        {
+                            iteration(x1, x2, e);
+                        }
+                        else
+                        {
+                            //kombo(1.0, 1.9);
+                        }
+                        return;
+                    }
+                case "2":
+                    {
+                        if ((fxa > 0 & fx2a > 0) | (fxa < 0 & fx2a < 0))
+                        {
+                            kombo(x2, x1, e);
+                        }
+                        else if ((fxb > 0 & fx2b > 0) | (fxb < 0 & fx2b < 0))
+                        {
+                            kombo(x1, x2, e);
+                        }
+                        else
+                        {
+                            //kombo(1.0, 1.9);
+                        }
+                        return;
+                    }
+            }
+                //Console.WriteLine(fxa + " " + fx2a + " " + fxb + " " + fx2b);
+                
+
+
+        }
+        static double[][] iteration(double x1, double x2, double stop)
+        {
+            List<double[]> kombo = new List<double[]>();
+            double la = Math.Abs(1 / Math.Max(f1(x1), f1(x2)));
+            while (true)
+            {
+
+                double[] line = new double[2];
+                line[0] = x1;
+                line[1] = Math.Max(f(x1), f(x2));
+                kombo.Add(line);
+                x1 = x1 + la * line[1];
+                if (Math.Abs(line[1]) < stop)
+                {
+                    break;
+                }
+
+            }
+
+            double[][] db = kombo.ToArray();
+            for (int i = 0; i < db.Length; i++)
+            {
+                Console.WriteLine(db[i][0] + " " + db[i][1]);
+
+            }
+            return kombo.ToArray();
+        }
+        static double[][] kombo(double x1, double x2, double stop)
+        {
+            List<double[]> kombo = new List<double[]>();
+            while (true)
+            {
+
+                double[] line = new double[6];
+                line[0] = x1;
+                line[1] = f(x1);
+                line[2] = x2;
+                line[3] = f(x2);
+                line[4] = f(x1) * (x1 - x2) / (f(x1) - f(x2));
+                line[5] = (f(x2) / f1(x2));
+                kombo.Add(line);
+                x1 = x1 - line[4];
+                x2 = x2 - line[5];
+                if (Math.Abs(line[1]) < stop | Math.Abs(line[3]) < stop)
+                {
+                    break;
+                }
+            }
+
+            double[][] db = kombo.ToArray();
+            for (int i = 0; i < db.Length; i++)
+            {
+                Console.WriteLine(db[i][0] + " " + db[i][1] + " " + db[i][2] + " " + db[i][3] + " " + db[i][4] + " " + db[i][5]);
+
+            }
+            return kombo.ToArray();
+        }
+        static double f(double x)
+        {
+            return Math.Sin(x + 0.5) - 2 * x + 1.5;
+        }
+        static double f1(double x)
+        {
+            return Math.Cos(x + 0.5) - 2;
+        }
+        static double f2(double x)
+        {
+            return -Math.Sin(x + 0.5);
+        }
+    }
+}
